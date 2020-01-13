@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/mtcat-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/mtcat-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/mtcat-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/mtcat-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/mtcat-blog/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/mtcat-blog/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://mtcat.github.io/mtcat-blog').hostname,
+    root: '/mtcat-blog/',
+    scheme: 'Muse',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"remove","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="Nginx在CentOS 7.3的安装与配置升级 CentOS 的 yum1yum -y update  用yum安装必要程序12yum -y install gcc gcc-c++ autoconf pcre-devel make automakeyum -y install wget httpd-tools vim  Nginx版本说明 Mainline version ：开发版,主要是给广大">
+<meta property="og:type" content="website">
+<meta property="og:title" content="mtcat的技术博客">
+<meta property="og:url" content="https://mtcat.github.io/mtcat-blog/Nginx%E5%9C%A8CentOS%207.3%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE.html">
+<meta property="og:site_name" content="mtcat的技术博客">
+<meta property="og:description" content="Nginx在CentOS 7.3的安装与配置升级 CentOS 的 yum1yum -y update  用yum安装必要程序12yum -y install gcc gcc-c++ autoconf pcre-devel make automakeyum -y install wget httpd-tools vim  Nginx版本说明 Mainline version ：开发版,主要是给广大">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mtcat.github.io/_assets/Nginx%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/ljnFrPYc23562AtUSLvSIYpQ.png">
+<meta property="article:published_time" content="2020-01-13T14:09:37.217Z">
+<meta property="article:modified_time" content="2020-01-13T13:57:27.033Z">
+<meta property="article:author" content="mtcat">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mtcat.github.io/_assets/Nginx%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/ljnFrPYc23562AtUSLvSIYpQ.png">
+
+<link rel="canonical" href="https://mtcat.github.io/mtcat-blog/Nginx%E5%9C%A8CentOS%207.3%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: false
+  };
+</script>
+
+  <title> | mtcat的技术博客
+  </title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/mtcat-blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mtcat的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">闲庭信步的生活</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/mtcat-blog/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/mtcat-blog/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/mtcat-blog/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/mtcat-blog/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+  
+  
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+    
+    
+    
+    <div class="post-block" lang="zh-CN">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">
+</h1>
+
+<div class="post-meta">
+  
+
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <h1 id="Nginx在CentOS-7-3的安装与配置"><a href="#Nginx在CentOS-7-3的安装与配置" class="headerlink" title="Nginx在CentOS 7.3的安装与配置"></a>Nginx在CentOS 7.3的安装与配置</h1><h2 id="升级-CentOS-的-yum"><a href="#升级-CentOS-的-yum" class="headerlink" title="升级 CentOS 的 yum"></a>升级 CentOS 的 yum</h2><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">yum -y update</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="用yum安装必要程序"><a href="#用yum安装必要程序" class="headerlink" title="用yum安装必要程序"></a>用yum安装必要程序</h2><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y install gcc gcc-c++ <span class="built_in">auto</span>conf pcre-devel make <span class="built_in">auto</span>make</span><br><span class="line">yum -y install wget httpd-tools vim</span><br></pre></td></tr></table></figure>
+
+<h2 id="Nginx版本说明"><a href="#Nginx版本说明" class="headerlink" title="Nginx版本说明"></a>Nginx版本说明</h2><ul>
+<li>Mainline version ：开发版,主要是给广大Nginx爱好者，测试、研究和学习的，但是不建议使用于生产环境。</li>
+<li>Stable version : 稳定版,也就是我们说的长期更新版本。这种版本一般比较成熟，经过长时间的更新测试，所以这种版本也是主流版本。</li>
+<li>legacy version : 历史版本，如果你需要以前的版本，Nginx也是有提供的。</li>
+</ul>
+<p>建议使用最新的Stable version版本。</p>
+<h2 id="基于Yum的方式安装Nginx"><a href="#基于Yum的方式安装Nginx" class="headerlink" title="基于Yum的方式安装Nginx"></a>基于Yum的方式安装Nginx</h2><p>我们可以先来查看一下yum源是中nginx是否已经存在，命令如下：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">list</span> | <span class="keyword">grep</span> nginx</span><br></pre></td></tr></table></figure>
+
+<p>如果出现类似下面的内容，说明yum源是存在的。 </p>
+<p><img src="../_assets/Nginx%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/ljnFrPYc23562AtUSLvSIYpQ.png" alt=""></p>
+<p>(细心的小伙伴可以发现系统原来的源只支持1.1.12版本，这版本有些低)</p>
+<p>如果不存在，或者不是你需要的版本，那我们可以自行配置yum源，下面是官网提供的源，我们可以放心大胆的使用。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[nginx]</span></span><br><span class="line"><span class="attr">name</span>=nginx repo</span><br><span class="line"><span class="attr">baseurl</span>=http://nginx.org/packages/OS/OSRELEASE/<span class="variable">$basearch</span>/</span><br><span class="line"><span class="attr">gpgcheck</span>=<span class="number">0</span></span><br><span class="line"><span class="attr">enabled</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>复制上面的代码，到以下路径.</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/etc/yum</span>.repos.d<span class="regexp">/nginx.repo</span></span><br></pre></td></tr></table></figure>
+
+<p>赋值完成后，你需要修改一下对应的操作系统和版本号，因为我的是centos和7的版本，所以改为这样。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">baseurl=http:<span class="regexp">//</span>nginx.org<span class="regexp">/packages/</span>centos<span class="regexp">/7/</span><span class="variable">$basearch</span><span class="regexp">/</span></span><br></pre></td></tr></table></figure>
+<p>你可以根据你的系统或需要的版本进行修改。</p>
+<p>现在开始安装nginx</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> nginx</span><br></pre></td></tr></table></figure>
+<p>安装完成后可以使用命令，来检测Nginx的版本。</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">nginx -v</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Nginx的配置文件解读"><a href="#Nginx的配置文件解读" class="headerlink" title="Nginx的配置文件解读"></a>Nginx的配置文件解读</h1><h2 id="nginx-conf文件解读"><a href="#nginx-conf文件解读" class="headerlink" title="nginx.conf文件解读"></a>nginx.conf文件解读</h2><p>nginx.conf 文件是Nginx总配置文件，在我们搭建服务器时经常调整的文件。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/etc/</span>nginx<span class="regexp">/nginx.conf</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 运行用户，默认即是nginx，可以不进行设置</span></span><br><span class="line"><span class="attribute">user</span>  nginx;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Nginx进程，一般设置为和CPU核数一样</span></span><br><span class="line"><span class="attribute">worker_processes</span>  <span class="number">1</span>;  </span><br><span class="line"></span><br><span class="line"><span class="comment"># 错误日志存放目录</span></span><br><span class="line"><span class="attribute">error_log</span>  /var/log/nginx/error.log <span class="literal">warn</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进程pid存放位置</span></span><br><span class="line"><span class="attribute">pid</span>  /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line"><span class="section">events</span> &#123;</span><br><span class="line">  <span class="attribute">worker_connections</span>  <span class="number">1024</span>; <span class="comment"># 单个后台进程的最大并发数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="attribute">include</span>  /etc/nginx/mime.types;   <span class="comment"># 文件扩展名与类型映射表</span></span><br><span class="line">    <span class="attribute">default_type</span>  application/octet-stream;  <span class="comment"># 默认文件类型</span></span><br><span class="line">    <span class="comment"># 设置日志模式</span></span><br><span class="line">    <span class="attribute">log_format</span>  main  <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] "<span class="variable">$request</span>" '</span></span><br><span class="line">                      <span class="string">'<span class="variable">$status</span> <span class="variable">$body_bytes_sent</span> "<span class="variable">$http_referer</span>" '</span></span><br><span class="line">                      <span class="string">'"<span class="variable">$http_user_agent</span>" "<span class="variable">$http_x_forwarded_for</span>"'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">access_log</span>  /var/log/nginx/access.log  main;   <span class="comment"># nginx访问日志存放位置</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">sendfile</span>        <span class="literal">on</span>;   <span class="comment"># 开启高效传输模式</span></span><br><span class="line">    <span class="comment">#tcp_nopush     on;    # 减少网络报文段的数量</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">keepalive_timeout</span>  <span class="number">65</span>;  <span class="comment"># 保持连接的时间，也叫超时时间</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#gzip  on;  # 开启gzip压缩</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">include</span> /etc/nginx/conf.d/<span class="regexp">*.conf</span>; <span class="comment"># 包含的子配置项位置和文件</span></span><br></pre></td></tr></table></figure>
+
+<p>我们看到最后有一个子文件的配置项，那我们打开这个include子文件配置项看一下里边都有些什么内容。</p>
+<h2 id="default-conf-配置项讲解"><a href="#default-conf-配置项讲解" class="headerlink" title="default.conf 配置项讲解"></a>default.conf 配置项讲解</h2><p>进入conf.d目录，打开default.conf。</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       <span class="number">80</span>;   <span class="comment"># 配置监听端口</span></span><br><span class="line">    server_name  localhost;  // 配置域名</span><br><span class="line"></span><br><span class="line">    <span class="comment">#charset koi8-r;     </span></span><br><span class="line">    <span class="comment">#access_log  /var/log/nginx/host.access.log  main;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">location</span> <span class="title">/ &#123;</span></span><br><span class="line"><span class="title">        root</span>   /usr/share/nginx/html;     <span class="comment">#服务默认启动目录</span></span><br><span class="line">        index  index.html index.htm;    <span class="comment">#默认访问文件</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#error_page  404              /404.html;   # 配置404页面</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># redirect server error pages to the static page /50x.html</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    error_page   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /<span class="number">50</span>x.html;   <span class="comment">#错误状态码的显示页面，配置后需要重启</span></span><br><span class="line">    <span class="keyword">location</span> <span class="title">= /50x</span>.html &#123;</span><br><span class="line">        root   /usr/share/nginx/html;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#location ~ \.php$ &#123;</span></span><br><span class="line">    <span class="comment">#    proxy_pass   http://127.0.0.1;</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#location ~ \.php$ &#123;</span></span><br><span class="line">    <span class="comment">#    root           html;</span></span><br><span class="line">    <span class="comment">#    fastcgi_pass   127.0.0.1:9000;</span></span><br><span class="line">    <span class="comment">#    fastcgi_index  index.php;</span></span><br><span class="line">    <span class="comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span></span><br><span class="line">    <span class="comment">#    include        fastcgi_params;</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># deny access to .htaccess files, if Apache's document root</span></span><br><span class="line">    <span class="comment"># concurs with nginx's one</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#location ~ /\.ht &#123;</span></span><br><span class="line">    <span class="comment">#    deny  all;</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>明白了这些配置项，我们知道我们的服务目录放在了/usr/share/nginx/html下，可以使用命令进入看一下目录下的文件。</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> <span class="string">/usr/share/nginx/html</span></span><br><span class="line"><span class="keyword">ls</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到目录下面有两个文件，50x.html 和 index.html。我们可以使用vim进行编辑。</p>
+<p>可以预想到，我们的nginx服务器已经可以为html提供服务器了。我们可以打开浏览器，访问ip地址试一试。</p>
+<p><strong>配置时可能会遇到的报错：</strong></p>
+<blockquote>
+<p>server name “***” has suspicious symbols</p>
+</blockquote>
+<p><strong>原因</strong><br>nginx要求  server_name 不能包含“/”    </p>
+<p>错误：server_name <a href="http://xxx.com" target="_blank" rel="noopener">http://xxx.com</a>;</p>
+<p>正确：server_name xxx.com;</p>
+<p>当然一般情况下我们都只有IP比如10.10.69.10。那么直接在server_name后填上ip就行</p>
+<p>一般：server_name 10.10.69.10;</p>
+<p><a href="http://jspang.com/posts/2018/10/05/nginx.html" target="_blank" rel="noopener">本文引用来自 技术胖http://jspang.com/posts/2018/10/05/nginx.html</a></p>
+
+      </div>
+      
+      
+      
+    </div>
+    
+
+    
+    
+    
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mtcat</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/mtcat-blog/lib/anime.min.js"></script>
+  <script src="/mtcat-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/mtcat-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/mtcat-blog/js/utils.js"></script>
+
+<script src="/mtcat-blog/js/motion.js"></script>
+
+
+<script src="/mtcat-blog/js/schemes/muse.js"></script>
+
+
+<script src="/mtcat-blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
