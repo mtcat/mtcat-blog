@@ -6,7 +6,11 @@ tags: whistle 调试 抓包
 
 [whistle](https://github.com/avwo/whistle)是基于Node实现的跨平台web调试代理工具，类似的工具有Windows平台上的[Fiddler](http://www.telerik.com/fiddler/)，主要用于查看、修改HTTP、HTTPS、Websocket的请求、响应，也可以作为HTTP代理服务器使用，不同于Fiddler通过断点修改请求响应的方式，whistle采用的是类似配置系统hosts的方式，一切操作都可以通过配置实现，支持域名、路径、正则表达式、通配符、通配路径等多种[匹配方式](http://wproxy.org/whistle/pattern.html)，且可以通过Node模块[扩展功能](http://wproxy.org/whistle/plugins.html)。
 
+
+
 <!-- more -->
+
+
 
 ### 安装whistle
 
@@ -32,7 +36,7 @@ whistle安装完成后，执行命令 `whistle help` 或 `w2 help`，可以查�
 
 ### 启动whistle
 
-> 最新版本的whistle支持三种等价的命令`whistle`、`w2`、`wproxy`
+> whistle支持三种等价的命令`whistle`、`w2`、`wproxy`
 
 启动whistle:
 
@@ -58,7 +62,7 @@ w2 stop
 w2 run
 ```
 
-启动完whistle后，最后一步需要配置代理。
+启动完whistle后，就需要配置代理。
 
 
 
@@ -74,7 +78,7 @@ w2 run
 
 浏览器代理：安装浏览器代理插件 
 
-安装Chrome代理插件：推荐安装[SwitchyOmega](https://chrome.google.com/webstore/detail/padekgcemlokbadohgkifijomclgjgif)
+安装Chrome代理插件：推荐安装`SwitchyOmega`，然后进行SwitchyOmega的设置
 
 ![](./前端调试工具-Whistle/switchyomega.jpg)
 
@@ -82,23 +86,9 @@ w2 run
 
 
 
-###  配置https
-
-现在很多应用都 https 化了，如果要调试这些应用，免不了就要对 https 的资源进行处理。而在上面也提到了，Whistle 是利用[『中间人攻击』](https://link.zhihu.com/?target=https%3A//zh.wikipedia.org/wiki/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB)的原理来抓 HTTPS 的报文的。所以，这里我们需要来信任下我们的中间人（Whistle）的根证书。
-
-根证书在哪儿呢？在刚才打开的 [http://127.0.0.1:8899/](https://link.zhihu.com/?target=http%3A//127.0.0.1%3A8899/) 的页面顶部，有个 HTTPS 按钮，点一下，会出来弹出框。
-
-![](./前端调试工具-Whistle/1580543128.png)
-
-{% asset_img 1580543128.png %}
-
-点击 "Download RootCA" 即可下载。然后，把这个证书设置成信任的就行了。
-
-
-
 ### 访问配置页面
 
-启动whistle及配置完代理后，用**Chrome浏览器(由于css兼容性问题界面只支持Chrome浏览器)**访问配置页面，如果能正常打开页面，whistle安装启动完毕，可以开始使用。
+启动whistle及配置完代理后，访问配置页面，如果能正常打开页面，whistle安装启动完毕，可以开始使用。
 
 可以通过以下三种方式来访问配置页面：
 
@@ -108,17 +98,70 @@ w2 run
 
 
 
+###  配置https
+
+现在很多应用都 https 化了，如果要调试这些应用，免不了就要对 https 的资源进行处理。而在上面也提到了，Whistle 是利用[『中间人攻击』](https://zh.wikipedia.org/wiki/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB)的原理来抓 https的报文的。所以，这里我们需要来信任下我们的中间人（Whistle）的根证书。
+
+根证书在哪儿呢？在刚才打开的配置页面顶部，有个 HTTPS 按钮，点一下，会出来弹出框。
+
+![](./前端调试工具-Whistle/1580543128.png)
+
+{% asset_img 1580543128.png %}
+
+点击 "Download RootCA" 下载，下载完点击安装rootCA.crt文件。
+
+- Windows
+
+  ![](./前端调试工具-Whistle/windows_rootca.jpeg)
+
+  {% asset_img windows_rootca.jpeg %}
+
+  双击证书，根据指引安装证书。证书安装过程，要确保证书存储到`受信任的根证书颁发机构`下。
+
+
+
+##### 开启拦截HTTPS
+
+![](./前端调试工具-Whistle/1580652013.png)
+
+{% asset_img 1580652013.png %}
+
+1.`Capture HTTPS CONNECTs`：开启Https拦截功能，只有勾上这个checkbox及装好根证书，whistle才能看到HTTPS、Websocket的请求
+
+1. 也可以通过配置来开启对部分请求的Https拦截功能
+
+   ```plain
+   www.test.com enable://intercept
+   /alibaba-inc/ enable://intercept
+   ```
+
+   > 也可以用过 enable://capture
+
+2. 如果想过滤部分请求不启用Https拦截功能
+
+   ```plain
+   # 指定域名
+   www.baidu.com  disable://intercept
+   
+   # 通过正则
+   /baidu/ disable://intercept
+   
+   # 不支持通过路径的方式设置
+   ```
+
+
+
 ### whistle常用配置
 
 ![](./前端调试工具-Whistle/1580544273.png)
 
 {% asset_img 1580544273.png %}
 
-如图[Rules](http://wproxy.org/whistle/webui/rules.html)，whistle的Rules配置页面有一个默认分组`Default`，用户也可以通过上面的菜单栏按钮`Create`、`Edit`、`Delete`分别创建、重命名、删除自定义分组，whistle先在选中的用户自定义分组中从上到下依次匹配，然后再到`Default`中匹配(如果`Default`分组被启用的情况下)。
+whistle的Rules配置页面有一个默认分组`Default`，用户也可以通过上面的菜单栏按钮`Create`、`Edit`、`Delete`分别创建、重命名、删除自定义分组，whistle先在选中的用户自定义分组中从上到下依次匹配，然后再到`Default`中匹配(如果`Default`分组被启用的情况下)。
 
 
 
-1. host映射和特定子路径的host映射，whistle不仅支持传统的host配置，端口的host转发配置
+1. host映射和特定子路径的host映射，whistle不仅支持传统的host配置，还支持端口的host转发配置
 
    ```
    # 直接的host配置
@@ -142,6 +185,8 @@ w2 run
    # Windows的路径分隔符可以用 \ 或者 /
    www.ifeng.com file://E:\xx\test\index.html
    ```
+
+   
 
 3. 请求转发，将指定域名请求转发到另一个域名
 
@@ -190,9 +235,11 @@ w2 run
    www.qq.com statusCode://404
    ```
 
+   
+
 8. Mock 数据
 
-   日常开发中，我们经常需要对后端接口进行 Mock，这样就不需要依赖后端实际部署情况了，或者我们需要测试一些边缘情况，Mock 这些边缘情况就可以免除为测试这样的边缘链路需要做的许多麻烦事情。最简单的 Mock 可以针对一个 pattern 替换响应体和响应码等等。
+   日常开发中，我们经常需要对后端接口进行 Mock，这样就不需要依赖后端部署了，或者我们需要测试一些边缘情况，Mock 这些边缘情况就可以免除为测试这样的边缘链路做许多麻烦事。最简单的 Mock 可以针对一个 pattern 替换响应体和响应码等等。
 
    ```
    # 将 example.com/api/user 接口的响应内容替换为 user.json 中的内容，并将响应码替换成 200
@@ -222,9 +269,11 @@ w2 run
 
 
 
+
+
 > 文章引用：
 >
-> http://wproxy.org/whistle
+> https://wproxy.org/whistle/
 >
 > https://zhuanlan.zhihu.com/p/47029559
 >
