@@ -145,8 +145,6 @@ w2 run
    
    # 通过正则
    /baidu/ disable://intercept
-   
-   # 不支持通过路径的方式设置
    ```
 
 
@@ -176,31 +174,47 @@ whistle的Rules配置页面有一个默认分组`Default`，用户也可以通�
 
    
 
-2. 本地替换，把响应替换成本地文件内容
+2. 替换线上文件，把响应替换成本地文件内容。协议头可以加也可以不加，不加表示匹配所有协议，否则只对指定协议生效
 
    ```
    # Mac、Linux
    www.ifeng.com file:///User/username/test/index.html
+   www.ifeng.com/cdn/example.js file:///User/username/test/example.js
    
    # Windows的路径分隔符可以用 \ 或者 /
    www.ifeng.com file://E:\xx\test\index.html
+   www.ifeng.com/cdn/example.js file://E:\xx\test\example.js
    ```
 
    
 
-3. 请求转发，将指定域名请求转发到另一个域名
+3. 替换请求，请求转发（将指定域名请求转发到另一个域名）
 
    ```
-   # 指定域名转发生效
+   # 替换请求url，我们可以在whistle的Network右侧里看到真是请求的url
+   http://qq.com/a/b?c=d http://qq.com/v/w?x=y&z=z
+   
+   # 请求转发
    www.qq.com www.jd.com
    
-   # 所有qq.com子域名转发生效
+   # 所有qq.com子域名转发
    **.qq.com www.jd.com
    ```
 
+   **注意：**替换请求规则的修改在浏览器的 network 里体现不出来，因为请求已经发出去，是到 whistle 层才被修改的，我们可以在whistle的Network右侧里看到真实请求的url
+
    
 
-4. 页面中注入html、js、css
+4. 重定向
+
+   ```
+   # 重定向
+   https://www.baidu.com/ redirect://https://www.qq.com/
+   ```
+
+   
+
+5. 页面中注入html、js、css
 
    whistle会自动根据响应内容的类型，判断是否注入相应的文本及如何注入(是否要用标签包裹起来)。
 
@@ -224,11 +238,7 @@ whistle的Rules配置页面有一个默认分组`Default`，用户也可以通�
 
    
 
-5. 
-
-6. 
-
-7. 修改返回码
+6. 修改返回码
 
    ```
    # 使 http 返回 404
@@ -237,7 +247,7 @@ whistle的Rules配置页面有一个默认分组`Default`，用户也可以通�
 
    
 
-8. Mock 数据
+7. Mock 数据
 
    日常开发中，我们经常需要对后端接口进行 Mock，这样就不需要依赖后端部署了，或者我们需要测试一些边缘情况，Mock 这些边缘情况就可以免除为测试这样的边缘链路做许多麻烦事。最简单的 Mock 可以针对一个 pattern 替换响应体和响应码等等。
 
