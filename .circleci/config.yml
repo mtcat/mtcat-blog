@@ -5,12 +5,21 @@ jobs:
       - image: circleci/node:10.16.3
     steps:
       - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
       - run:
           name: install
           command: sudo yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
       - run:
           name: build
           command: yarn build
+      - add_ssh_keys:
+          fingerprints:
+            - 3a:44:28:e1:b0:59:4a:d8:c6:49:95:3e:d5:77:44:d8
       - run:
           name: deploy
           command: yarn deploy
