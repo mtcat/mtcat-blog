@@ -17,6 +17,11 @@ jobs:
       - run:
           name: build
           command: yarn build
+      - run:
+          name: git configure
+          command: |
+            git config user.email "miaoting123@foxmail.com"
+            git config user.name "mtcat"
       - add_ssh_keys:
           fingerprints:
             - 3a:44:28:e1:b0:59:4a:d8:c6:49:95:3e:d5:77:44:d8
