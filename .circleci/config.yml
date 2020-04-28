@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  gh-pages: sugarshin/gh-pages@0.0.6
 jobs:
   build:
     docker:
@@ -17,14 +19,8 @@ jobs:
       - run:
           name: build
           command: yarn build
-      - run:
-          name: git configure
-          command: |
-            git config user.email "miaoting123@foxmail.com"
-            git config user.name "mtcat"
-      - add_ssh_keys:
-          fingerprints:
-            - 3a:44:28:e1:b0:59:4a:d8:c6:49:95:3e:d5:77:44:d8
-      - run:
-          name: deploy
-          command: yarn deploy
+      - gh-pages/deploy:
+          build-dir: public
+          requires:
+            - public
+          ssh-fingerprints: 3a:44:28:e1:b0:59:4a:d8:c6:49:95:3e:d5:77:44:d8
