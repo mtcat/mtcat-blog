@@ -7,7 +7,7 @@ jobs:
   install_and_build:
     docker:
       - image: circleci/node:10.19.0
-    working_directory: ~/mtcat-blog
+    working_directory: $CIRCLE_WORKING_DIRECTORY
     steps:
       - checkout
       - restore_cache:
@@ -30,6 +30,6 @@ workflows:
       - gh-pages/deploy:
           requires:
             - install_and_build
-          working_directory: ~/mtcat-blog
+          working_directory: $CIRCLE_WORKING_DIRECTORY
           build-dir: public
           ssh-fingerprints: 3a:44:28:e1:b0:59:4a:d8:c6:49:95:3e:d5:77:44:d8
