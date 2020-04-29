@@ -7,7 +7,6 @@ jobs:
   install_and_build:
     docker:
       - image: circleci/node:10.19.0
-    working_directory: $CIRCLE_WORKING_DIRECTORY
     steps:
       - checkout
       - restore_cache:
