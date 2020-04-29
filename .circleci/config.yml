@@ -4,7 +4,7 @@ orbs:
   gh-pages: sugarshin/gh-pages@0.0.6
 
 jobs:
-  install:
+  install_and_build:
     docker:
       - image: circleci/node:10.19.0
     steps:
@@ -18,10 +18,6 @@ jobs:
           key: dependency-cache-{{ checksum "yarn.lock" }}
           paths:
             - ./node_modules
-  build:
-    docker:
-      - image: circleci/node:10.19.0
-    steps:
       - run:
           name: build
           command: yarn build
@@ -29,12 +25,9 @@ jobs:
 workflows:
   build_and_deploy:
     jobs:
-      - install
-      - build:
-          requires:
-            - install
+      - install_and_build
       - gh-pages/deploy:
           requires:
-            - build
+            - install_and_build
           build-dir: public
           ssh-fingerprints: 3a:44:28:e1:b0:59:4a:d8:c6:49:95:3e:d5:77:44:d8
