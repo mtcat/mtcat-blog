@@ -3,14 +3,13 @@ version: 2.1
 orbs:
   gh-pages: sugarshin/gh-pages@0.0.6
 
-executors:
-  node-env:
-    docker:
-      - image: circleci/node:10.19.0
-
 jobs:
   build and deploy:
-    executor: node-env
+    branches:
+      only:
+        - master
+    docker:
+      - image: circleci/node:10.19.0
     steps:
       - checkout
       - restore_cache:
@@ -28,14 +27,3 @@ jobs:
       - gh-pages/deploy:
           build-dir: public
           ssh-fingerprints: 3a:44:28:e1:b0:59:4a:d8:c6:49:95:3e:d5:77:44:d8
-
-workflows:
-  build_and_deploy:
-    triggers:
-      - schedule:
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - build and deploy
