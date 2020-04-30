@@ -4,7 +4,7 @@ orbs:
   gh-pages: sugarshin/gh-pages@0.0.6
 
 jobs:
-  install_and_build:
+  build and deploy:
     docker:
       - image: circleci/node:10.19.0
     steps:
@@ -21,18 +21,11 @@ jobs:
       - run:
           name: build
           command: yarn build
-      - persist_to_workspace:
-          root: ./
-          paths: 
-            - public
+      - gh-pages/deploy:
+          build-dir: public
+          ssh-fingerprints: 3a:44:28:e1:b0:59:4a:d8:c6:49:95:3e:d5:77:44:d8
 
 workflows:
-  build_and_deploy:
+  build and deploy:
     jobs:
-      - install_and_build
-      - gh-pages/deploy:
-          requires:
-            - install_and_build
-          build-dir: public
-          attach-workspace: true
-          ssh-fingerprints: 3a:44:28:e1:b0:59:4a:d8:c6:49:95:3e:d5:77:44:d8
+      - build and deploy
