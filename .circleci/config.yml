@@ -30,10 +30,9 @@ jobs:
           ssh-fingerprints: 3a:44:28:e1:b0:59:4a:d8:c6:49:95:3e:d5:77:44:d8
 
 workflows:
-  version: 2
-    build_and_deploy:
-      jobs:
-        - build and deploy
+  build_and_deploy:
+    jobs:
+      - build and deploy:
           filters:
             branches:
               only:
