@@ -4,13 +4,13 @@ orbs:
   gh-pages: sugarshin/gh-pages@0.0.6
 
 executors:
-  nodeEnv:
+  node-env:
     docker:
       - image: circleci/node:10.19.0
 
 jobs:
   build and deploy:
-    executor: nodeEnv
+    executor: node-env
     steps:
       - checkout
       - restore_cache:
