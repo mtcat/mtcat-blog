@@ -55,7 +55,7 @@ make
 make install
 ```
 
-建立超级链接, 不然 sudo node 时会报 "command not found"（这个步骤目前还没有经过实践，如果遇到这个问题可以实践看看，一般情况下没有这个步骤，node、npm已经是全局）
+建立全局链接, 不然 sudo node 时会报 "command not found"
 ```
 sudo ln -s /usr/local/bin/node /usr/bin/node
 sudo ln -s /usr/local/lib/node /usr/lib/node
@@ -72,7 +72,7 @@ NodeJS 到这里就基本安装完成了。
 
 <br>
 
-# 也可以使用已经编译好的文件（没有经过实践）
+# 也可以使用已经编译好的文件（推荐）
 
 在官网选择需要下载的版本
 ```
@@ -89,7 +89,7 @@ sudo tar -xvf node-v8.16.0-linux-x64.tar.xz
 sudo mv node-v8.16.0-linux-x64 nodejs
 ```
 
-创建全局链接
+创建全局链接，不然 sudo node 时会报 "command not found"
 ```
 sudo ln -s /usr/local/src/nodejs/bin/node /usr/local/bin/node  
 sudo ln -s /usr/local/src/nodejs/bin/npm /usr/local/bin/npm
