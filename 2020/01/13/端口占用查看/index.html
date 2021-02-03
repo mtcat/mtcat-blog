@@ -44,19 +44,19 @@
   };
 </script>
 
-  <meta name="description" content="在windows上查看端口占用的进程根据端口号查看进程号，例如查看8000端口 1netstat -aon | findstr 8000     再根据进程号查看进程 1tasklist | findstr 2908     在任务管理器中就可以找到该进程">
+  <meta name="description" content="在windows上查看端口占用的进程根据端口号查看进程号，例如查看8000端口 1netstat -aon | findstr 8000     再根据进程号查看进程 1tasklist | findstr 2908     在任务管理器中就可以找到该进程 在linux服务器上查看端口占用的进程根据端口号查看进程号，例如查看4873端口 1sudo lsof -i :4873  杀死指定进程 1s">
 <meta property="og:type" content="article">
 <meta property="og:title" content="系统端口占用查看">
 <meta property="og:url" content="https://mtcat.github.io/mtcat-blog/2020/01/13/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B/index.html">
 <meta property="og:site_name" content="mtcat的技术博客">
-<meta property="og:description" content="在windows上查看端口占用的进程根据端口号查看进程号，例如查看8000端口 1netstat -aon | findstr 8000     再根据进程号查看进程 1tasklist | findstr 2908     在任务管理器中就可以找到该进程">
+<meta property="og:description" content="在windows上查看端口占用的进程根据端口号查看进程号，例如查看8000端口 1netstat -aon | findstr 8000     再根据进程号查看进程 1tasklist | findstr 2908     在任务管理器中就可以找到该进程 在linux服务器上查看端口占用的进程根据端口号查看进程号，例如查看4873端口 1sudo lsof -i :4873  杀死指定进程 1s">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://mtcat.github.io/mtcat-blog/2020/01/13/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B/15719736518763.png">
 <meta property="og:image" content="https://mtcat.github.io/mtcat-blog/2020/01/13/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B/15719736518763.png">
 <meta property="og:image" content="https://mtcat.github.io/mtcat-blog/2020/01/13/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B/157197368922.png">
 <meta property="og:image" content="https://mtcat.github.io/mtcat-blog/2020/01/13/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B/157197368922.png">
 <meta property="article:published_time" content="2020-01-13T14:51:14.000Z">
-<meta property="article:modified_time" content="2020-04-30T09:06:30.844Z">
+<meta property="article:modified_time" content="2021-02-03T05:31:39.276Z">
 <meta property="article:author" content="mtcat">
 <meta property="article:tag" content="端口">
 <meta name="twitter:card" content="summary">
@@ -209,7 +209,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-30 17:06:30" itemprop="dateModified" datetime="2020-04-30T17:06:30+08:00">2020-04-30</time>
+                <time title="修改时间：2021-02-03 13:31:39" itemprop="dateModified" datetime="2021-02-03T13:31:39+08:00">2021-02-03</time>
               </span>
 
           
@@ -236,6 +236,14 @@
 <img src="/mtcat-blog/2020/01/13/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B/157197368922.png" class="">
 
 <p>在任务管理器中就可以找到该进程</p>
+<h1 id="在linux服务器上查看端口占用的进程"><a href="#在linux服务器上查看端口占用的进程" class="headerlink" title="在linux服务器上查看端口占用的进程"></a>在linux服务器上查看端口占用的进程</h1><p>根据端口号查看进程号，例如查看4873端口</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lsof -i :<span class="number">4873</span></span><br></pre></td></tr></table></figure>
+
+<p>杀死指定进程</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo kill <span class="number">-9</span> &#123;PID&#125;</span><br></pre></td></tr></table></figure>
+
+<p>服务器中使用 pm2 启动 verdaccio 守护进程</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pm2 <span class="keyword">start</span> <span class="string">`which verdaccio`</span></span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -321,7 +329,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在windows上查看端口占用的进程"><span class="nav-number">1.</span> <span class="nav-text">在windows上查看端口占用的进程</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在windows上查看端口占用的进程"><span class="nav-number">1.</span> <span class="nav-text">在windows上查看端口占用的进程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在linux服务器上查看端口占用的进程"><span class="nav-number">2.</span> <span class="nav-text">在linux服务器上查看端口占用的进程</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -337,14 +345,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/mtcat-blog/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/mtcat-blog/tags/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -376,8 +384,8 @@
 
 <div class="copyright">
   
-  &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
