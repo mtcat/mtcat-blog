@@ -110,3 +110,10 @@ nginx -s reopen
 ```
 
 [本文引用来自 技术胖http://jspang.com/posts/2018/10/05/nginx.html](http://jspang.com/posts/2018/10/05/nginx.html)
+
+
+
+### 将nginx配置到全局变量：
+
+打开windows环境变量配置界面，编辑系统变量，在Path的系统变量下添加nginx文件路径，如：C:\Program Files (x86)\nginx-1.20.1。即可完成nginx的全局变量配置。打开命令行，使用 nginx -v 验证是否配置成功。
+
